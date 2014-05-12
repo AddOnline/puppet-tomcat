@@ -105,5 +105,17 @@ describe 'tomcat::instance', :type => :define do
     it { should contain_service('tomcat-tomcat_instance').with_name('tomcat8-tomcat_instance') }
   end
 
+  describe 'Test installation with firewalling' do
+    let(:facts) { {
+      :operatingsystem => 'CentOS',
+      :osfamily        => 'RedHat',
+      :firewall     => true,
+      :firewall_dst => '10.42.42.42',
+    } }
+
+    it { should contain_firewall('tomcat_instance-tomcat_instance-tcp-8080').with_port('8080') }
+  end
+
+
 end
 

@@ -1,10 +1,23 @@
 # Define: tomcat::instance
 #
+#
+# == Parameters
+#
 #  [*tomcat_version*]
 #   By default we use the distro tomcat version but if you have many installed
 #   version you would need to set the tomcat version you want for each
 #   instance.
 #   Default: ''
+#
+# [*firewall*]
+#  True to enable firewalling, false to disable.
+#  Default : Value of tomcat main class.
+#
+# [*firewall_tool*]
+#
+# [*firewall_src*]
+#
+# [*firewall_dst*]
 #
 define tomcat::instance (
 
@@ -56,6 +69,11 @@ define tomcat::instance (
   $monitor                      = false,
   $monitor_tool                 = $::monitor_tool,
 
+  $firewall                     = '',
+  $firewall_tool                = '',
+  $firewall_src                 = '',
+  $firewall_dst                 = '',
+
   $manager                      = false,
 
   $modjk_workers_file           = '',
@@ -74,7 +92,7 @@ define tomcat::instance (
 
   ) {
 
-  require tomcat::params
+  include tomcat
 
   $ensure_real = $service_ensure ? {
     'undef' => undef,
@@ -88,6 +106,26 @@ define tomcat::instance (
     ''      => $tomcat::params::real_version,
     default => $tomcat_version,
   }
+
+  # Firewalling
+  $bool_firewall = $firewall ? {
+    ''      => $tomcat::instance,
+    default => $firewall,
+  }
+  $manage_firewall_tool = $firewall_tool ? {
+    ''      => $tomcat::firewall_tool,
+    default => $firewall_tool,
+  }
+  $manage_firewall_src = $firewall_src ? {
+    ''      => $tomcat::firewall_src,
+    default => $firewall_src,
+  }
+  $manage_firewall_dst = $firewall_dst ? {
+    ''      => $tomcat::firewall_dst,
+    default => $firewall_dst,
+  }
+
+  $tomcat_version = $tomcat::params::real_version
 
   # Application name, required
   $instance_name = $name
@@ -482,6 +520,19 @@ define tomcat::instance (
       server_name => $apache_vhost_server_name,
       template    => $apache_vhost_template,
       docroot     => $apache_vhost_docroot,
+    }
+  }
+
+  if $tomcat::bool_firewall == true {
+    firewall { "tomcat_instance-${name}-${tomcat::protocol}-${http_port}":
+      source      => $manage_firewall_src,
+      destination => $tomcat::firewall_dst,
+      protocol    => $tomcat::protocol,
+      port        => $http_port,
+      action      => 'allow',
+      direction   => 'input',
+      tool        => $manage_firewall_tool,
+      enable      => $tomcat::manage_firewall,
     }
   }
 
