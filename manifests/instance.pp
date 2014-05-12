@@ -69,11 +69,6 @@ define tomcat::instance (
   $monitor                      = false,
   $monitor_tool                 = $::monitor_tool,
 
-  $firewall                     = '',
-  $firewall_tool                = '',
-  $firewall_src                 = '',
-  $firewall_dst                 = '',
-
   $manager                      = false,
 
   $modjk_workers_file           = '',
@@ -525,14 +520,14 @@ define tomcat::instance (
 
   if $tomcat::bool_firewall == true {
     firewall { "tomcat_instance-${name}-${tomcat::protocol}-${http_port}":
-      source      => $manage_firewall_src,
+      source      => $tomcat::firewall_src,
       destination => $tomcat::firewall_dst,
       protocol    => $tomcat::protocol,
       port        => $http_port,
       action      => 'allow',
       direction   => 'input',
-      tool        => $manage_firewall_tool,
-      enable      => $tomcat::manage_firewall,
+      tool        => $tomcat::firewall_tool,
+      enable      => $tomcat::bool_firewall,
     }
   }
 
