@@ -45,6 +45,8 @@ define tomcat::instance (
   $monitor                      = false,
   $monitor_tool                 = $::monitor_tool,
 
+  $firewall_dst                 = '',
+
   $manager                      = false,
 
   $modjk_workers_file           = '',
@@ -62,6 +64,12 @@ define tomcat::instance (
 
   $bool_instance_autorestart=any2bool($instance_autorestart)
   $bool_manager=any2bool($manager)
+
+  # Firewall
+  $manage_firewall_dst = $firewall_dst ? {
+    ''      => $tomcat::firewall_dst,
+    default => $firewall_dst,
+  }
 
   $tomcat_version = $tomcat::params::real_version
 
@@ -440,7 +448,7 @@ define tomcat::instance (
   if $tomcat::bool_firewall == true {
     firewall { "tomcat_instance-${name}-${tomcat::protocol}-${http_port}":
       source      => $tomcat::firewall_src,
-      destination => $tomcat::firewall_dst,
+      destination => $manage_firewall_dst,
       protocol    => $tomcat::protocol,
       port        => $http_port,
       action      => 'allow',
