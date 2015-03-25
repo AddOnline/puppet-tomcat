@@ -1,4 +1,4 @@
-# Define: tomcat::instance
+# Define: tomcat::modjk::instance
 #
 # [*workers_file*]
 #  The modjk workers.properties file.
