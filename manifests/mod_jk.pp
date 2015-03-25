@@ -16,7 +16,7 @@
 #
 #
 define tomcat::mod_jk (
-  $workers_file,
+  $workers_file = $name,
 ) {
 
   require tomcat
@@ -28,7 +28,7 @@ define tomcat::mod_jk (
     group => $tomcat::config_file_group,
     mode  => $tomcat::config_file_mode,
   }
-  concat::fragment { "${workers_file}-header":
+  concat::fragment { "${name}-header":
     target  => $workers_file,
     content => template('tomcat/modjk/workers.properties-header.erb'),
   }
