@@ -15,8 +15,8 @@ describe 'tomcat::instance', :type => :define do
 
   describe 'Test CentOS usage' do
     let (:facts) { {
-      :operatingsystem => 'CentOS',
       :osfamily        => 'RedHat',
+      :operatingsystem => 'CentOS',
     } }
 
     it { should contain_file('instance_tomcat_defaults_tomcat_instance').with_path('/etc/sysconfig/tomcat6-tomcat_instance') }
@@ -69,6 +69,25 @@ describe 'tomcat::instance', :type => :define do
     end
   end
 
+  define "With modjk" do
+    let(:params) { {
+      ajp_port             => '8042',
+      modjk_workers_file   => '/etc/example/42.cnf',
+      modjk_lbfactor       => '42',
+      modjk_socket_timeout => '4242',
+      modjk_fail_on_status => '424',
+      modjk_domain         => 'example42',
+      modjk_ping_mode      => 'ABC',
+    } }
+
+    it { should contain_tomcat__modjk__instance('tomcat_instance').with_workers_file('/etc/example/42.cnf') }
+    it { should contain_tomcat__modjk__instance('tomcat_instance').with_lbfactor('42') }
+    it { should contain_tomcat__modjk__instance('tomcat_instance').with_socket_timeout('4242') }
+    it { should contain_tomcat__modjk__instance('tomcat_instance').with_fail_on_status('424') }
+    it { should contain_tomcat__modjk__instance('tomcat_instance').with_domain('example42') }
+    it { should contain_tomcat__modjk__instance('tomcat_instance').with_ping_mode('ABC') }
+    it { should contain_tomcat__modjk__instance('tomcat_instance').with_ajp_port('8042') }
+  end
 
 end
 
