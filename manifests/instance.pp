@@ -379,18 +379,10 @@ define tomcat::instance (
   if ($modjk_workers_file != '') {
     include concat::setup
 
-    $normalized_modjk_workers_file = regsubst($modjk_workers_file, '/', '_', 'G')
-
     concat::fragment{"instance_tomcat_modjk_${instance_name}":
-      target  => "${::concat::setup::concatdir}/instance_tomcat_modjk_${normalized_modjk_workers_file}",
-      content => template('tomcat/modjk.worker.properties'),
+      target  => $workers_file,
+      content => template('tomcat/modjk/workers.properties-item.erb'),
     }
-
-    concat::fragment{"instance_tomcat_modjk_names_${instance_name}":
-      target  => "${::concat::setup::concatdir}/instance_tomcat_modjk_names_${normalized_modjk_workers_file}",
-      content => "${instance_name}_worker, ",
-    }
-
   }
 
   if $monitor == true {

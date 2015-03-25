@@ -19,39 +19,18 @@ define tomcat::mod_jk (
   $workers_file,
 ) {
 
+  require tomcat
+
   include concat::setup
 
-  $normalized_workers_file = regsubst($workers_file, '/', '_', 'G')
-
-  $workers_file_frags = "${::concat::setup::concatdir}/instance_tomcat_modjk_${normalized_workers_file}"
-  concat{ $workers_file_frags:
-    owner => root,
-    group => root,
-    mode  => '0644',
+  concat { $workers_file:
+    owner => $tomcat::config_file_owner,
+    group => $tomcat::config_file_group,
+    mode  => $tomcat::config_file_mode,
   }
-
-  $names_file  = "${::concat::setup::concatdir}/instance_tomcat_modjk_names_${normalized_workers_file}"
-  concat{ $names_file:
-    owner => root,
-    group => root,
-    mode  => '0644',
-  }
-
-  file { $workers_file:
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    content => template('tomcat/modjk.workers.properties')
-  }
-
-  exec { "tomcat_mod_jk_${name}_replace_worker":
-    command => "/bin/bash -c \"sed -i -e '/%%workers%%/{r ${workers_file_frags}' -e 'd}' ${workers_file}\"",
-    require => Concat[$workers_file_frags],
-  }
-
-  exec { "tomcat_mod_jk_${name}_replace_worker_names":
-    command => "/bin/bash -c \"sed -i 's/%%names_file%%/`cat ${names_file}`/' ${workers_file}\"",
-    require => Concat[$names_file],
+  concat::fragment { "${workers_file}-header":
+    target  => $workers_file,
+    content => template('tomcat/modjk/workers.properties-header.erb'),
   }
 
 }
