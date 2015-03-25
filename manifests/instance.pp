@@ -52,6 +52,11 @@ define tomcat::instance (
   $manager                      = false,
 
   $modjk_workers_file           = '',
+  $modjk_lbfactor               = '1',
+  $modjk_socket_timeout         = '0',
+  $modjk_fail_on_status         = '0',
+  $modjk_domain                 = '',
+  $modjk_ping_mode              = '',
 
   $apache_vhost_create          = false,
   $apache_vhost_template        = 'tomcat/apache/vhost.conf.erb',
@@ -377,11 +382,16 @@ define tomcat::instance (
   }
 
   if ($modjk_workers_file != '') {
-    include concat::setup
-
-    concat::fragment{"instance_tomcat_modjk_${instance_name}":
-      target  => $modjk_workers_file,
-      content => template('tomcat/modjk/workers.properties-item.erb'),
+    tomcat::modjk::instance { $instance_name:
+      workers_file   => $modjk_workers_file,
+      ajp_port       => $ajp_port,
+      instance_name  => $instance_name,
+      host           => 'localhost',
+      lbfactor       => $modjk_lbfactor,
+      ping_mode      => $modjk_ping_mode,
+      socket_timeout => $modjk_socket_timeout,
+      domain         => $modjk_domain,
+      fail_on_status => $modjk_fail_on_status,
     }
   }
 
