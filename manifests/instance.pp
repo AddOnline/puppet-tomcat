@@ -380,7 +380,7 @@ define tomcat::instance (
     include concat::setup
 
     concat::fragment{"instance_tomcat_modjk_${instance_name}":
-      target  => $workers_file,
+      target  => $modjk_workers_file,
       content => template('tomcat/modjk/workers.properties-item.erb'),
     }
   }
