@@ -1,10 +1,10 @@
-worker.list=<%= @instance_name %>_worker
-worker.<%= @instance_name %>_worker.port=<%= @ajp_port %>
-worker.<%= @instance_name %>_worker.host=<%= @host %>
-worker.<%= @instance_name %>_worker.type=ajp13
-worker.<%= @instance_name %>_worker.lbfactor=<%= @lbfactor %>
+worker.list=<%= @instance_name %>
+worker.<%= @instance_name %>.port=<%= @ajp_port %>
+worker.<%= @instance_name %>.host=<%= @host %>
+worker.<%= @instance_name %>.type=ajp13
+worker.<%= @instance_name %>.lbfactor=<%= @lbfactor %>
 worker.<%= @instance_name %>.socket_timeout=<%= @socket_timeout %>
 worker.<%= @instance_name %>.fail_on_status=<%= @fail_on_status %>
-<% if @ping_mode != '' %>worker.<%= @instance_name %>_worker.ping_mode=<%= @ping_mode %><% end %>
-<% if @domain != '' %>worker.<%= @instance_name %>_worker.domain=<%= @domain %><% end %>
+<% if @ping_mode != '' %>worker.<%= @instance_name %>.ping_mode=<%= @ping_mode %><% end %>
+<% if @domain != '' %>worker.<%= @instance_name %>.domain=<%= @domain %><% end %>
 
