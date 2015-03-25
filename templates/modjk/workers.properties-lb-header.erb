@@ -1,0 +1,6 @@
+worker.<%= @lb_name %>.type=lb
+worker.<%= @lb_name %>.sticky_session=<%- if @bool_sticky_session %>True<% else %>False<% end %>
+worker.<%= @lb_name %>.sticky_session_force=<%- if @bool_sticky_session_force %>True<% else %>False<% end %>
+worker.<%= @lb_name %>.method=<%= @method %>
+worker.<%= @lb_name %>.lock=<%= @lock %>
+worker.<%= @lb_name %>.retries=<%= @retries %>
