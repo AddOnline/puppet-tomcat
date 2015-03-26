@@ -123,7 +123,7 @@ if [ ${warned} -eq 1 ]; then
 fi
 
 LONGNAME=`basename ${TARGET}`
-INSTANCE_NAME=`echo ${LONGNAME} | awk -F - {'print $2'}`
+INSTANCE_NAME=`echo ${LONGNAME} | cut -d- -f2-`
 
 mkdir -p ${TARGET}
 
