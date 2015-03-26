@@ -71,13 +71,13 @@ describe 'tomcat::instance', :type => :define do
 
   define "With modjk" do
     let(:params) { {
-      ajp_port             => '8042',
-      modjk_workers_file   => '/etc/example/42.cnf',
-      modjk_lbfactor       => '42',
-      modjk_socket_timeout => '4242',
-      modjk_fail_on_status => '424',
-      modjk_domain         => 'example42',
-      modjk_ping_mode      => 'ABC',
+      :ajp_port             => '8042',
+      :modjk_workers_file   => '/etc/example/42.cnf',
+      :modjk_lbfactor       => '42',
+      :modjk_socket_timeout => '4242',
+      :modjk_fail_on_status => '424',
+      :modjk_domain         => 'example42',
+      :modjk_ping_mode      => 'ABC',
     } }
 
     it { should contain_tomcat__modjk__instance('tomcat_instance').with_workers_file('/etc/example/42.cnf') }
@@ -87,6 +87,20 @@ describe 'tomcat::instance', :type => :define do
     it { should contain_tomcat__modjk__instance('tomcat_instance').with_domain('example42') }
     it { should contain_tomcat__modjk__instance('tomcat_instance').with_ping_mode('ABC') }
     it { should contain_tomcat__modjk__instance('tomcat_instance').with_ajp_port('8042') }
+  end
+
+  describe "Specify tomcat version" do
+    let(:params) { {
+      :tomcat_version => '7',
+      :http_port => 8080,
+      :control_port => 8480,
+    } }
+    let (:facts) { {
+      :operatingsystem => 'Debian',
+      :osfamily        => 'Debian',
+    } }
+
+    it { should contain_service('tomcat-tomcat_instance').with_name('tomcat7-tomcat_instance') }
   end
 
 end

@@ -1,5 +1,11 @@
 # Define: tomcat::instance
 #
+#  [*tomcat_version*]
+#   By default we use the distro tomcat version but if you have many installed
+#   version you would need to set the tomcat version you want for each
+#   instance.
+#   Default: ''
+#
 define tomcat::instance (
 
   $http_port,
@@ -42,6 +48,7 @@ define tomcat::instance (
   $web_xml_template             = '',
   $manager_xml_template         = 'tomcat/instance/manager.xml.erb',
 
+  $tomcat_version               = '',
   $tomcatuser                   = '',
   $tomcatpassword               = '',
 
@@ -77,7 +84,10 @@ define tomcat::instance (
   $bool_instance_autorestart=any2bool($instance_autorestart)
   $bool_manager=any2bool($manager)
 
-  $tomcat_version = $tomcat::params::real_version
+  $manage_tomcat_version = $tomcat_version ? {
+    ''      => $tomcat::params::real_version,
+    default => $tomcat_version,
+  }
 
   # Application name, required
   $instance_name = $name
@@ -95,7 +105,7 @@ define tomcat::instance (
   }
 
   # CATALINA BASE
-  $instance_path = "/var/lib/${tomcat::params::pkgver}-${instance_name}"
+  $instance_path = "/var/lib/tomcat${manage_tomcat_version}-${instance_name}"
 
   # Startup script
   $instance_startup = "${instance_path}/bin/startup.sh"
@@ -104,7 +114,7 @@ define tomcat::instance (
   $instance_shutdown = "${instance_path}/bin/shutdown.sh"
 
   $instance_init_template = $init_template ? {
-    ''      => "tomcat/instance/init${tomcat_version}-${::osfamily}.erb",
+    ''      => "tomcat/instance/init${manage_tomcat_version}-${::osfamily}.erb",
     default => $init_template
   }
 
@@ -117,13 +127,13 @@ define tomcat::instance (
   }
 
   $instance_init_defaults_template = $init_defaults_template ? {
-    ''      => "tomcat/instance/defaults${tomcat_version}-${::osfamily}.erb",
+    ''      => "tomcat/instance/defaults${manage_tomcat_version}-${::osfamily}.erb",
     default => $init_defaults_template
   }
 
   $instance_init_defaults_template_path = $::osfamily ? {
-    Debian => "/etc/default/tomcat${tomcat_version}-${instance_name}",
-    RedHat => "/etc/sysconfig/tomcat${tomcat_version}-${instance_name}",
+    Debian => "/etc/default/tomcat${manage_tomcat_version}-${instance_name}",
+    RedHat => "/etc/sysconfig/tomcat${manage_tomcat_version}-${instance_name}",
   }
 
   #manage restart of the instance automatically
@@ -180,7 +190,7 @@ define tomcat::instance (
 
     file { "instance_manager_xml_${instance_name}":
       ensure  => present,
-      path    => "/etc/${tomcat::params::pkgver}-${instance_name}/Catalina/localhost/manager.xml",
+      path    => "/etc/tomcat${manage_tomcat_version}-${instance_name}/Catalina/localhost/manager.xml",
       mode    => '0644',
       owner   => 'root',
       group   => 'root',
@@ -194,7 +204,7 @@ define tomcat::instance (
   # Running service
   service { "tomcat-${instance_name}":
       ensure     => $ensure_real,
-      name       => "${tomcat::params::pkgver}-${instance_name}",
+      name       => "tomcat${manage_tomcat_version}-${instance_name}",
       enable     => $service_enable,
       pattern    => $instance_name,
       hasrestart => $service_hasrestart,
@@ -217,7 +227,7 @@ define tomcat::instance (
   if $tomcat::params::systemd_file_exist == 'file' {
 
     $instance_systemd_template = $systemd_template ? {
-      ''      => "tomcat/instance/systemd${tomcat_version}-${::osfamily}.erb",
+      ''      => "tomcat/instance/systemd${manage_instance_autorestart}-${::osfamily}.erb",
       default => $systemd_template
     }
 
@@ -400,7 +410,7 @@ define tomcat::instance (
       process  => 'java',
       argument => $instance_name,
       service  => "tomcat-${instance_name}",
-      pidfile  => "/var/run/${tomcat::params::pkgver}-${instance_name}.pid",
+      pidfile  => "/var/run/tomcat${manage_tomcat_version}-${instance_name}.pid",
       enable   => true,
       tool     => $monitor_tool,
     }
@@ -419,7 +429,7 @@ define tomcat::instance (
       processname => $instance_name,
       configdir   => "${instance_path}/conf/",
       bindir      => "${instance_path}/bin/",
-      pidfile     => "/var/run/${tomcat::params::pkgver}-${instance_name}.pid",
+      pidfile     => "/var/run/tomcat${manage_tomcat_version}-${instance_name}.pid",
       datadir     => "${instance_path}/webapps",
       logdir      => "${instance_path}/logs",
       httpport    => $http_port,

@@ -5,4 +5,4 @@
 [ -r <%= scope.lookupvar('basedir') %>/<%= instance_name %>/bin/params ] && . <%= scope.lookupvar('basedir') %>/<%= instance_name %>/bin/params
 export CATALINA_BASE=<%= scope.lookupvar('basedir') %>/<%= instance_name %>
 
-/usr/share/tomcat/<%= scope.lookupvar('tomcat::params::pkgver') %>/bin/shutdown.sh ${SHUTDOWNOPTIONS}
+/usr/share/tomcat/tomcat<%= scope.lookupvar('manage_tomcat_version') %>/bin/shutdown.sh ${SHUTDOWNOPTIONS}

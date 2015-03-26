@@ -169,14 +169,14 @@ sed -i -e "s/Connector port=\"8009\"/Connector port=\"${APORT}\"/g" ${TARGET}/co
 cat > ${TARGET}/bin/startup.sh << EOT
 #!/bin/sh
 export CATALINA_BASE=${FULLTARGET}
-/usr/share/<%= scope.lookupvar('tomcat::params::pkgver') %>/bin/startup.sh
+/usr/share/tomcat<%= scope.lookupvar('manage_tomcat_version') %>/bin/startup.sh
 echo "Tomcat started"
 EOT
 
 cat > ${TARGET}/bin/shutdown.sh << EOT
 #!/bin/sh
 export CATALINA_BASE=${FULLTARGET}
-/usr/share/<%= scope.lookupvar('tomcat::params::pkgver') %>/bin/shutdown.sh
+/usr/share/tomcat<%= scope.lookupvar('manage_tomcat_version') %>/bin/shutdown.sh
 echo "Tomcat stopped"
 EOT
 
