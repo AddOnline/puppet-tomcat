@@ -122,8 +122,6 @@ define tomcat::instance (
     default => $firewall_dst,
   }
 
-  $tomcat_version = $tomcat::params::real_version
-
   # Application name, required
   $instance_name = $name
 
