@@ -93,7 +93,7 @@ describe 'tomcat::instance', :type => :define do
 
   describe "Specify tomcat version" do
     let(:params) { {
-      :tomcat_version => '7',
+      :tomcat_version => '8',
       :http_port => 8080,
       :control_port => 8480,
     } }
@@ -102,7 +102,7 @@ describe 'tomcat::instance', :type => :define do
       :osfamily        => 'Debian',
     } }
 
-    it { should contain_service('tomcat-tomcat_instance').with_name('tomcat7-tomcat_instance') }
+    it { should contain_service('tomcat-tomcat_instance').with_name('tomcat8-tomcat_instance') }
   end
 
 end
