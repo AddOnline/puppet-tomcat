@@ -103,6 +103,8 @@ describe 'tomcat::instance', :type => :define do
     } }
 
     it { should contain_service('tomcat-tomcat_instance').with_name('tomcat8-tomcat_instance') }
+    it { should contain_file('instance_tomcat_init_tomcat_instance').with_path('/etc/init.d/tomcat8-tomcat_instance') }
+
   end
 
   describe 'Test installation with firewalling' do

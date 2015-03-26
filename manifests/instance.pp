@@ -153,10 +153,10 @@ define tomcat::instance (
 
   $instance_tomcat_init_path = $::osfamily ? {
     /(?i:CentOS|RedHat|Scientific)/ => $::lsbmajdistrelease ? {
-      7       => "${tomcat::params::config_file_init}-${instance_name}.service",
-      default => "${tomcat::params::config_file_init}-${instance_name}",
+      7       => "/usr/lib/systemd/system/tomcat-${instance_name}.service",
+      default => "/etc/init.d/tomcat${manage_tomcat_version}-${instance_name}",
     },
-    default   => "${tomcat::params::config_file_init}-${instance_name}",
+    default   => "/etc/init.d/tomcat${manage_tomcat_version}-${instance_name}",
   }
 
   $instance_init_defaults_template = $init_defaults_template ? {
