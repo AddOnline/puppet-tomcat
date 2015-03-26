@@ -118,6 +118,9 @@ describe 'tomcat::instance', :type => :define do
     it { should contain_firewall('tomcat_instance-tomcat_instance-tcp-8080').with_port('8080') }
   end
 
-
+  describe 'Create tomcat instance directory' do
+    it { should contain_exec('instance_tomcat_tomcat_instance').with_command('/usr/bin/tomcat-instance-create -p 8080 -c 8480  -w SHUTDOWN -o tomcat -g tomcat -v 6  /var/lib/tomcat6-tomcat_instance') }
+    it { should contain_exec('instance_tomcat_tomcat_instance').with_require(/File\[\/usr\/bin\/tomcat-instance-create\]/) }
+  end
 end
 

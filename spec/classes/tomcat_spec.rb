@@ -195,5 +195,9 @@ describe 'tomcat' do
     end
   end
 
+  describe 'Create tomcat-instance-create script' do
+    it { should contain_file('/usr/bin/tomcat-instance-create').with_mode('0775') }
+  end
+
 end
 

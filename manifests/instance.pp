@@ -192,25 +192,17 @@ define tomcat::instance (
   }
 
   $instance_create_instance_cmd_exec = $create_instance_cmd_exec ? {
-    ''      => "/usr/bin/tomcat-instance-create -p ${http_port} -c ${control_port} ${real_ajp_port} -w ${magicword} -o ${instance_owner} -g ${instance_group} ${real_runtime_dir} ${instance_path}",
+    ''      => "/usr/bin/tomcat-instance-create -p ${http_port} -c ${control_port} ${real_ajp_port} -w ${magicword} -o ${instance_owner} -g ${instance_group} -v ${manage_tomcat_version} ${real_runtime_dir} ${instance_path}",
     default => $create_instance_cmd_exec,
-  }
-
-  if (!defined(File['/usr/bin/tomcat-instance-create'])) {
-    file { '/usr/bin/tomcat-instance-create':
-      ensure  => present,
-      mode    => '0775',
-      owner   => 'root',
-      group   => 'root',
-      content => template($instance_create_instance_cmd_template),
-      before  => Exec["instance_tomcat_${instance_name}"]
-    }
   }
 
   exec { "instance_tomcat_${instance_name}":
     command => $instance_create_instance_cmd_exec,
     creates => "${instance_path}/webapps",
-    require => [ Package['tomcat'] ],
+    require => [
+      Package['tomcat'],
+      File['/usr/bin/tomcat-instance-create'],
+    ],
   }
 
   # Install Manager if $manager == true

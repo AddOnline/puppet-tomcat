@@ -348,6 +348,14 @@ class tomcat (
     audit   => $tomcat::manage_audit,
   }
 
+  file { '/usr/bin/tomcat-instance-create':
+    ensure  => present,
+    mode    => '0775',
+    owner   => 'root',
+    group   => 'root',
+    content => template('tomcat/instance/tomcat-instance-create.erb'),
+  }
+
   # The whole tomcat configuration directory can be recursively overriden
   if $tomcat::source_dir {
     file { 'tomcat.dir':
