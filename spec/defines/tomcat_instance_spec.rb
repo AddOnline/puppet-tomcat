@@ -69,8 +69,10 @@ describe 'tomcat::instance', :type => :define do
     end
   end
 
-  define "With modjk" do
+  describe "With modjk" do
     let(:params) { {
+      :http_port => 8080,
+      :control_port => 8480,
       :ajp_port             => '8042',
       :modjk_workers_file   => '/etc/example/42.cnf',
       :modjk_lbfactor       => '42',
