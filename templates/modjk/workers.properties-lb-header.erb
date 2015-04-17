@@ -4,3 +4,5 @@ worker.<%= @lb_name %>.sticky_session_force=<%- if @bool_sticky_session_force %>
 worker.<%= @lb_name %>.method=<%= @method %>
 worker.<%= @lb_name %>.lock=<%= @lock %>
 worker.<%= @lb_name %>.retries=<%= @retries %>
+worker.list=<%= @lb_name %>
+worker.<%= @lb_name %>.balance_workers=<%= @lb_members %>
