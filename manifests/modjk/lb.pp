@@ -11,6 +11,7 @@ define tomcat::modjk::lb (
   $method               = 'Request',
   $lock                 = 'Optimistic',
   $retries              = 2,
+  $lb_members           = '',
 ) {
 
     $bool_sticky_session = any2bool($sticky_session)
