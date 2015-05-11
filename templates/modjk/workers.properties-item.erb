@@ -1,7 +1,7 @@
 worker.list=<%= @instance_name %>
 worker.<%= @instance_name %>.port=<%= @ajp_port %>
 worker.<%= @instance_name %>.host=<%= @host %>
-worker.<%= @instance_name %>.type=ajp13
+worker.<%= @instance_name %>.type=<%= @type %>
 worker.<%= @instance_name %>.lbfactor=<%= @lbfactor %>
 worker.<%= @instance_name %>.socket_timeout=<%= @socket_timeout %>
 worker.<%= @instance_name %>.fail_on_status=<%= @fail_on_status %>

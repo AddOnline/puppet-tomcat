@@ -38,6 +38,7 @@ define tomcat::modjk::instance (
   $ajp_port,
   $instance_name  = $name,
   $host           = 'localhost',
+  $type           = 'ajp13',
   $lbfactor       = '1',
   $ping_mode      = '',
   $socket_timeout = '0',
