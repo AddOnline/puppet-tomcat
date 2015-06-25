@@ -5,6 +5,7 @@ worker.<%= @instance_name %>.type=<%= @type %>
 worker.<%= @instance_name %>.lbfactor=<%= @lbfactor %>
 worker.<%= @instance_name %>.socket_timeout=<%= @socket_timeout %>
 worker.<%= @instance_name %>.fail_on_status=<%= @fail_on_status %>
+worker.<%= @instance_name %>.connection_pool_timeout=<%= @connection_pool_timeout %>
 <% if @ping_mode != '' %>worker.<%= @instance_name %>.ping_mode=<%= @ping_mode %><% end %>
 <% if @domain != '' %>worker.<%= @instance_name %>.domain=<%= @domain %><% end %>
 
