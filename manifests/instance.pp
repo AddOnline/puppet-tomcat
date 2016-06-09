@@ -19,6 +19,9 @@
 #
 # [*firewall_dst*]
 #
+# [*init_path*]
+#  The init path.
+#
 define tomcat::instance (
 
   $http_port,
@@ -44,6 +47,7 @@ define tomcat::instance (
 
   $catalina_properties_template = '',
   $logging_properties_template  = '',
+  $init_path                    = '',
   $init_template                = '',
   $systemd_template             = '',
   $init_defaults_template       = '',
@@ -151,12 +155,15 @@ define tomcat::instance (
     default => $init_template
   }
 
-  $instance_tomcat_init_path = $::osfamily ? {
-    /(?i:CentOS|RedHat|Scientific)/ => $::lsbmajdistrelease ? {
-      7       => "/usr/lib/systemd/system/tomcat-${instance_name}.service",
-      default => "/etc/init.d/tomcat${manage_tomcat_version}-${instance_name}",
+  $instance_tomcat_init_path = $init_path ? {
+    ''      => $::osfamily ? {
+      /(?i:CentOS|RedHat|Scientific)/ => $::lsbmajdistrelease ? {
+        7       => "/usr/lib/systemd/system/tomcat-${instance_name}.service",
+        default => "/etc/init.d/tomcat${manage_tomcat_version}-${instance_name}",
+      },
+      default                         => "/etc/init.d/tomcat${manage_tomcat_version}-${instance_name}",
     },
-    default   => "/etc/init.d/tomcat${manage_tomcat_version}-${instance_name}",
+    default => $init_path,
   }
 
   $instance_init_defaults_template = $init_defaults_template ? {
