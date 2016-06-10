@@ -22,6 +22,9 @@
 # [*init_path*]
 #  The init path.
 #
+# [*options*]
+#  Free to use variables.
+#
 define tomcat::instance (
 
   $http_port,
@@ -89,7 +92,8 @@ define tomcat::instance (
   $apache_vhost_server_name     = '',
   $apache_vhost_docroot         = undef,
   $apache_vhost_proxy_alias     = '',
-  $apache_vhost_context         = ''
+  $apache_vhost_context         = '',
+  $options                      = '',
 
   ) {
 
