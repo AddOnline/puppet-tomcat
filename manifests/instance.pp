@@ -176,8 +176,8 @@ define tomcat::instance (
   }
 
   $instance_init_defaults_template_path = $::osfamily ? {
-    Debian => "/etc/default/tomcat${manage_tomcat_version}-${instance_name}",
-    RedHat => "/etc/sysconfig/tomcat${manage_tomcat_version}-${instance_name}",
+    'Debian' => "/etc/default/tomcat${manage_tomcat_version}-${instance_name}",
+    'RedHat' => "/etc/sysconfig/tomcat${manage_tomcat_version}-${instance_name}",
   }
 
   #manage restart of the instance automatically
