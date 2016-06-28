@@ -246,7 +246,7 @@ define tomcat::instance (
   # Running service
   service { "tomcat-${instance_name}":
       ensure     => $ensure_real,
-      name       => "tomcat${manage_tomcat_version}-${instance_name}",
+      name       => $manage_service_name,
       enable     => $service_enable,
       pattern    => $instance_name,
       hasrestart => $service_hasrestart,
