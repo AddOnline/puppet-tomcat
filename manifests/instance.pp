@@ -188,7 +188,7 @@ define tomcat::instance (
 
   #manage restart of the instance automatically
   $manage_instance_autorestart = $bool_instance_autorestart ? {
-    true      => "Service[tomcat-${instance_name}]",
+    true      => "Service[$manage_service_name]",
     false     => undef,
   }
 
