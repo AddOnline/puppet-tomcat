@@ -31,6 +31,7 @@ define tomcat::instance (
   $control_port,
   $ajp_port                     = '',
   $instance_autorestart         = true,
+  $service_name                 = '',
   $service_enable               = true,
   $service_ensure               = 'running',
   $service_hasrestart           = true,
@@ -110,6 +111,11 @@ define tomcat::instance (
   $manage_tomcat_version = $tomcat_version ? {
     ''      => $tomcat::params::real_version,
     default => $tomcat_version,
+  }
+
+  $manage_service_name = $service_name ? {
+    ''      => "tomcat${manage_tomcat_version}-${instance_name}",
+    default => $service_name,
   }
 
   # Firewalling
