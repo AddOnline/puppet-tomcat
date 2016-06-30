@@ -100,6 +100,9 @@ define tomcat::instance (
 
   include tomcat
 
+  # Application name, required
+  $instance_name = $name
+
   $ensure_real = $service_ensure ? {
     'undef' => undef,
     default => $service_ensure,
@@ -135,9 +138,6 @@ define tomcat::instance (
     ''      => $tomcat::firewall_dst,
     default => $firewall_dst,
   }
-
-  # Application name, required
-  $instance_name = $name
 
   # Application owner, by default the same instance name
   $instance_owner = $owner ? {
